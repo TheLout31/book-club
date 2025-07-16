@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import "./App.css";
 import AuthPage from "./pages/AuthPage";
 import Navbar from "./components/Navbar";
+import Discussion from "./pages/Discussion"
 
 function App() {
   const location = useLocation();
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<AuthPage />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/discussions" element={<Discussion/>} />
       </Routes>
     </>
   );

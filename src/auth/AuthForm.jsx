@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser } from "./services/authServices";
-import Alert from "@mui/material/Alert";
+import Toast from "../components/Toast";
 
 const AuthForm = ({ isLogin }) => {
   const [email, setEmail] = useState("");
@@ -23,6 +23,10 @@ const AuthForm = ({ isLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setError(null);
+    if (!email || !password) {
+      setError("Fill the Fields");
+      return;
+    }
     if (isLogin) {
       dispatch(loginUser(email, password))
         .then(() => navigate("/home"))
@@ -31,7 +35,7 @@ const AuthForm = ({ isLogin }) => {
       // navigate("/home");
     } else {
       if (password !== confirmPassword) {
-        alert("password and confirm password does'nt match!!!");
+        setError("Confirm password does'nt match!!!");
         return;
       }
       dispatch(registerUser(email, password));
@@ -41,9 +45,12 @@ const AuthForm = ({ isLogin }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {error && (
-        <Alert variant="filled" severity="error" onClose={() => setError(null)}>
-          {error}
-        </Alert>
+        <Toast
+          variant="filled"
+          severity="error"
+          children={error}
+          onClose={() => setError(null)}
+        />
       )}
       {!isLogin && (
         <input
