@@ -60,6 +60,7 @@ export const loginUser = (email, password) => async (dispatch) => {
 export const logoutUser = () => async (dispatch) => {
   try {
     await signOut(auth);
+    localStorage.clear()
     dispatch(clearAuth());
   } catch (error) {
     console.error("Logout error:", error);

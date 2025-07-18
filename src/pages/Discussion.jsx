@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase/config";
-import { ref, push, onValue, serverTimestamp, off } from "firebase/database";
-import Alert from "@mui/material/Alert";
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  serverTimestamp,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import Toast from "../components/Toast";
+
 const Discussion = () => {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
@@ -10,21 +17,20 @@ const Discussion = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const discussionsRef = ref(db, "discussions");
-    const callback = (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const parsed = Object.entries(data).map(([id, value]) => ({
-          id,
-          ...value,
-        }));
-        setDiscussions(parsed);
-      }
-    };
+    const discussionsRef = collection(db, "discussions");
+    const q = query(discussionsRef, orderBy("timestamp", "desc"));
 
-    onValue(discussionsRef, callback);
-    return () => off(discussionsRef, "value", callback); // Correct cleanup
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const parsed = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setDiscussions(parsed);
+    });
+
+    return () => unsubscribe();
   }, []);
+
   const handleClose = () => {
     setError(null);
   };
@@ -38,16 +44,15 @@ const Discussion = () => {
       return;
     }
 
-    const discussionsRef = ref(db, "discussions");
-
     try {
-      await push(discussionsRef, {
+      await addDoc(collection(db, "discussions"), {
         name,
         message,
-          timestamp: serverTimestamp(),
+        timestamp: serverTimestamp(),
       });
 
       setMessage("");
+      setName("")
     } catch (err) {
       console.error("Failed to submit discussion:", err);
       setError("Failed to submit discussion. Check your Firebase config.");
@@ -84,7 +89,7 @@ const Discussion = () => {
             varient="outlined"
             severity="info"
             children={error}
-            onClose={() => handleClose()}
+            onClose={handleClose}
           />
         )}
         <button
@@ -105,7 +110,9 @@ const Discussion = () => {
               <h3 className="text-lg font-bold text-indigo-700">{d.name}</h3>
               <p className="text-gray-700 mt-2">{d.message}</p>
               <p className="text-xs text-gray-500 mt-1">
-                {new Date(d.timestamp).toLocaleString()}
+                {d.timestamp?.toDate
+                  ? new Date(d.timestamp.toDate()).toLocaleString()
+                  : "Just now"}
               </p>
             </div>
           ))
