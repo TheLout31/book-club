@@ -9,38 +9,32 @@ import {
   orderBy,
 } from "firebase/firestore";
 import Toast from "../components/Toast";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDiscussions } from "../redux/slice/discussionSlice";
+import DiscussionCard from "../components/DiscussionCard";
 
 const Discussion = () => {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [discussions, setDiscussions] = useState([]);
-  const [error, setError] = useState(null);
+  const [formError, setFormError] = useState("");
+  const { data, loading, error } = useSelector((state) => state.discussions);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const discussionsRef = collection(db, "discussions");
-    const q = query(discussionsRef, orderBy("timestamp", "desc"));
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const parsed = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setDiscussions(parsed);
-    });
-
-    return () => unsubscribe();
+    dispatch(fetchDiscussions());
   }, []);
 
   const handleClose = () => {
-    setError(null);
+    setFormError(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
+    setFormError(null);
 
     if (!name || !message) {
-      setError("Fill the Fields");
+      setFormError("Fill the Fields");
       return;
     }
 
@@ -49,13 +43,17 @@ const Discussion = () => {
         name,
         message,
         timestamp: serverTimestamp(),
+        upVotes: 0,
+        downVotes: 0,
+        upVoted: false,
+        downVoted: false,
       });
 
       setMessage("");
-      setName("")
+      setName("");
     } catch (err) {
       console.error("Failed to submit discussion:", err);
-      setError("Failed to submit discussion. Check your Firebase config.");
+      setFormError("Failed to submit discussion. Check your Firebase config.");
     }
   };
 
@@ -84,11 +82,11 @@ const Discussion = () => {
           onChange={(e) => setMessage(e.target.value)}
           className="w-full mb-4 p-3 border border-indigo-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
         ></textarea>
-        {error && (
+        {formError && (
           <Toast
             varient="outlined"
             severity="info"
-            children={error}
+            children={formError}
             onClose={handleClose}
           />
         )}
@@ -102,20 +100,10 @@ const Discussion = () => {
 
       {/* Recent Discussions */}
       <div className="max-w-3xl mx-auto space-y-4">
-        {discussions.length === 0 ? (
+        {data.length === 0 ? (
           <p className="text-center text-indigo-600">No discussions yet.</p>
         ) : (
-          discussions.map((d) => (
-            <div key={d.id} className="bg-white p-5 rounded shadow">
-              <h3 className="text-lg font-bold text-indigo-700">{d.name}</h3>
-              <p className="text-gray-700 mt-2">{d.message}</p>
-              <p className="text-xs text-gray-500 mt-1">
-                {d.timestamp?.toDate
-                  ? new Date(d.timestamp.toDate()).toLocaleString()
-                  : "Just now"}
-              </p>
-            </div>
-          ))
+          data.map((d) => <DiscussionCard data={d} id={d.id} />)
         )}
       </div>
     </div>
