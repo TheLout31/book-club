@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
+import { db } from "../firebase/config";
 import {
   setDoc,
   deleteDoc,
@@ -8,86 +8,56 @@ import {
   getDocs,
   serverTimestamp,
 } from "firebase/firestore";
-import Toast from "../components/Toast";
-import { db, auth } from "../firebase/config";
-import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
-import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import { colors, IconButton } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { CircularProgress, IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { toggleBookMark } from "../redux/slice/bookMarkThunks";
-import { addBookmarkToState } from "../redux/slice/bookmarkSlice";
 
-const BooksList = ({ category = "mystery" }) => {
-  const [books, setBooks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch();
-  const bookMarked = useSelector((state) => state.bookmarks);
+const BookMarks = () => {
   const UID = useSelector((state) => state.auth.user);
-  // const uid = auth.currentUser.uid
-
-  // console.log("USER ID ==>", UID.user);
-
-  console.log("bookmarked data =-===>", bookMarked);
-
-  const isBookMarked = (id) => {
-    return (
-      Array.isArray(bookMarked) &&
-      bookMarked.some((item) => item && item.key === id)
-    );
-  };
+  console.log(UID);
+  const [bookMarks, setBookMarks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const handleBookMark = (data) => {
     console.log("Single Book Data =====>", data);
     dispatch(toggleBookMark(data));
   };
 
-  // Fetch books from OpenLibrary subject API
-  useEffect(() => {
-    const fetchBooks = async () => {
-      if (!category) return;
-      setLoading(true);
-      try {
-        const res = await fetch(
-          `https://openlibrary.org/subjects/${category}.json?limit=10`
-        );
-        const data = await res.json();
-        setBooks(data.works); // List of books
-      } catch (error) {
-        console.error("Failed to fetch mystery books:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBooks();
-  }, [category]);
-
   useEffect(() => {
     const fetchBookmarks = async () => {
       try {
+        setLoading(true);
         const colRef = collection(db, "bookmarks", UID, "items");
         const snapshot = await getDocs(colRef);
         const bookmarkList = snapshot.docs
           .map((doc) => doc.data())
           .filter((item) => item && item.key);
-        console.log("bookmarkList==>", bookmarkList);
-        dispatch(addBookmarkToState(...bookmarkList));
+        setBookMarks(bookmarkList);
+        setLoading(false);
+        console.log(bookMarks);
       } catch (err) {
-        console.error("Error fetching bookmarks:", err);
+        console.log("Error fetching bookmarks:", err);
+        setLoading(false);
       }
     };
 
     fetchBookmarks();
-  }, []);
-
+  }, [dispatch]);
   return (
     <div className="min-h-screen bg-indigo-50 px-6 py-10">
       {loading ? (
         <div className="flex align-middle justify-center h-7">
           <CircularProgress size="3rem" style={{ color: "#432DD7" }} />
         </div>
+      ) : bookMarks.length === 0 ? (
+        <div className="text-center text-gray-600 font-medium text-xl ">
+          No Bookmarks yet.
+        </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {books.map((book) => {
+          {bookMarks.map((book) => {
             const coverUrl = book.cover_id
               ? `https://covers.openlibrary.org/b/id/${book.cover_id}-M.jpg`
               : "https://via.placeholder.com/150x220?text=No+Cover";
@@ -112,16 +82,7 @@ const BooksList = ({ category = "mystery" }) => {
                     </p>
                   </div>
                   <IconButton onClick={() => handleBookMark(book)}>
-                    {isBookMarked(book.key) ? (
-                      <BookmarkOutlinedIcon
-                        style={{
-                          color: "black",
-                          transition: "color ease-in-out",
-                        }}
-                      />
-                    ) : (
-                      <BookmarkBorderOutlinedIcon style={{ color: "black" }} />
-                    )}
+                    <DeleteIcon style={{ color: "black" }} />
                   </IconButton>
                 </div>
               </div>
@@ -133,4 +94,4 @@ const BooksList = ({ category = "mystery" }) => {
   );
 };
 
-export default BooksList;
+export default BookMarks;

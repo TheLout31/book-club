@@ -3,11 +3,12 @@ import Home from "./pages/Home";
 import "./App.css";
 import AuthPage from "./pages/AuthPage";
 import Navbar from "./components/Navbar";
-import Discussion from "./pages/Discussion"
+import Discussion from "./pages/Discussion";
+import BookMarks from "./pages/BookMarks";
 
 function App() {
   const location = useLocation();
-  
+
   const hideNavbar = location.pathname === "/";
   return (
     <>
@@ -15,7 +16,8 @@ function App() {
       <Routes>
         <Route path="/" element={<AuthPage />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/discussions" element={<Discussion/>} />
+        <Route path="/discussions" element={<Discussion />} />
+        <Route path="/bookmarks" element={<BookMarks />} />
       </Routes>
     </>
   );

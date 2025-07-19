@@ -9,7 +9,7 @@ const bookmarkSlice = createSlice({
   initialState,
   reducers: {
     addBookmarkToState: (state, action) => {
-       state.push(action.payload)
+       return [...state,action.payload]
     },
     removeBookmarkFromState: (state, action) => {
       return state.filter((item) => item.key !== action.payload);

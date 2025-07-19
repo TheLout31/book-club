@@ -46,7 +46,10 @@ export const loginUser = (email, password) => async (dispatch) => {
       photoURL,
     } = userCredential.user;
     dispatch(setUser({ uid, email: userEmail, displayName, photoURL }));
-    localStorage.setItem("user", JSON.stringify(uid));
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ uid, email: userEmail, displayName, photoURL })
+    );
 
     return userCredential.user;
   } catch (error) {
@@ -60,7 +63,7 @@ export const loginUser = (email, password) => async (dispatch) => {
 export const logoutUser = () => async (dispatch) => {
   try {
     await signOut(auth);
-    localStorage.clear()
+    localStorage.clear();
     dispatch(clearAuth());
   } catch (error) {
     console.error("Logout error:", error);

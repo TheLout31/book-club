@@ -43,9 +43,12 @@ const Navbar = () => {
 
           {/* Right Menu */}
           <div className="hidden md:flex space-x-6">
-            <button className="hover:bg-white hover:text-indigo-600 transition px-4 py-2 rounded-md font-semibold">
+            <Link
+              to="/bookmarks"
+              className="hover:bg-white hover:text-indigo-600 transition px-4 py-2 rounded-md font-semibold"
+            >
               Bookmarks
-            </button>
+            </Link>
             <button className="hover:bg-white hover:text-indigo-600 transition px-4 py-2 rounded-md font-semibold">
               Suggestions
             </button>
