@@ -12,6 +12,9 @@ const DiscussionCard = ({ data, id }) => {
   const [downVote, setDownVotes] = useState(data?.downVotes || 0);
   const [downVoted, setDownVoted] = useState(data?.downVoted || false);
 
+
+  console.log(data.timestamp)
+
   async function updateDocument(documentId, newData) {
     const docRef = doc(db, "discussions", documentId);
     try {
@@ -25,55 +28,66 @@ const DiscussionCard = ({ data, id }) => {
   const handleUpVotes = () => {
     let newUpVote = upVote;
     let newDownVote = downVote;
+    let newUpVoted = upVoted;
+    let newDownVoted = downVoted;
 
     if (downVoted) {
       newDownVote -= 1;
       setDownVotes(newDownVote);
       setDownVoted(false);
+      newDownVoted = false;
     }
 
     if (upVoted) {
       newUpVote -= 1;
       setUpVote(newUpVote);
       setUpVoted(false);
+      newUpVoted = false;
     } else {
       newUpVote += 1;
       setUpVote(newUpVote);
       setUpVoted(true);
+      newUpVoted = true;
     }
 
     updateDocument(id, {
       upVotes: newUpVote,
       downVotes: newDownVote,
+      upVoted: newUpVoted,
+      downVoted: newDownVoted,
     });
   };
 
   const handleDownVotes = () => {
     let newUpVote = upVote;
     let newDownVote = downVote;
-    
+    let newUpVoted = upVoted;
+    let newDownVoted = downVoted;
 
     if (upVoted) {
       newUpVote -= 1;
       setUpVote(newUpVote);
       setUpVoted(false);
+      newUpVoted = false;
     }
 
     if (downVoted) {
       newDownVote -= 1;
       setDownVotes(newDownVote);
       setDownVoted(false);
+      newDownVoted = false;
     } else {
       newDownVote += 1;
       setDownVotes(newDownVote);
       setDownVoted(true);
+      newDownVoted = true;
     }
 
     updateDocument(id, {
       upVotes: newUpVote,
-      upVoted: upVoted,
+      upVoted: newUpVoted,
       downVotes: newDownVote,
-      downVoted: downVoted,
+      downVoted: newDownVoted,
     });
   };
 

@@ -12,10 +12,12 @@ import Toast from "../components/Toast";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDiscussions } from "../redux/slice/discussionSlice";
 import DiscussionCard from "../components/DiscussionCard";
+import { CircularProgress } from "@mui/material";
 
 const Discussion = () => {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
+
   const [discussions, setDiscussions] = useState([]);
   const [formError, setFormError] = useState("");
   const { data, loading, error } = useSelector((state) => state.discussions);
@@ -48,7 +50,7 @@ const Discussion = () => {
         upVoted: false,
         downVoted: false,
       });
-
+      dispatch(fetchDiscussions());
       setMessage("");
       setName("");
     } catch (err) {
@@ -99,8 +101,13 @@ const Discussion = () => {
       </form>
 
       {/* Recent Discussions */}
+      {error && <Toast variant="filled" severity="error" children={error} />}
       <div className="max-w-3xl mx-auto space-y-4">
-        {data.length === 0 ? (
+        {loading ? (
+          <div className="flex align-middle justify-center h-7">
+            <CircularProgress size="3rem" style={{ color: "#432DD7" }} />
+          </div>
+        ) : data.length === 0 ? (
           <p className="text-center text-indigo-600">No discussions yet.</p>
         ) : (
           data.map((d) => <DiscussionCard data={d} id={d.id} />)

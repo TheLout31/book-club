@@ -38,7 +38,9 @@ const AuthForm = ({ isLogin }) => {
         setError("Confirm password does'nt match!!!");
         return;
       }
-      dispatch(registerUser(email, password));
+      dispatch(registerUser(email, password))
+        .then(() => console.log("Succefully Created New User"))
+        .catch((error) => setError(error.message));
     }
   };
 

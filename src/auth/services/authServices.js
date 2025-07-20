@@ -21,8 +21,8 @@ export const registerUser = (email, password) => async (dispatch) => {
       photoURL,
     } = userCredential.user;
     dispatch(setUser({ uid, email: userEmail, displayName, photoURL }));
-
-    console.log(userCredential.user);
+    
+    return userCredential.user;
   } catch (error) {
     dispatch(setAuthError(error.message));
     throw error;

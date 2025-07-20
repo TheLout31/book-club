@@ -23,28 +23,29 @@ const BookMarks = () => {
   const handleBookMark = (data) => {
     console.log("Single Book Data =====>", data);
     dispatch(toggleBookMark(data));
+    fetchBookmarks()
+  };
+
+  const fetchBookmarks = async () => {
+    try {
+      setLoading(true);
+      const colRef = collection(db, "bookmarks", UID.uid, "items");
+      const snapshot = await getDocs(colRef);
+      const bookmarkList = snapshot.docs
+        .map((doc) => doc.data())
+        .filter((item) => item && item.key);
+      setBookMarks(bookmarkList);
+      setLoading(false);
+      console.log(bookMarks);
+    } catch (err) {
+      console.log("Error fetching bookmarks:", err);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    const fetchBookmarks = async () => {
-      try {
-        setLoading(true);
-        const colRef = collection(db, "bookmarks", UID, "items");
-        const snapshot = await getDocs(colRef);
-        const bookmarkList = snapshot.docs
-          .map((doc) => doc.data())
-          .filter((item) => item && item.key);
-        setBookMarks(bookmarkList);
-        setLoading(false);
-        console.log(bookMarks);
-      } catch (err) {
-        console.log("Error fetching bookmarks:", err);
-        setLoading(false);
-      }
-    };
-
     fetchBookmarks();
-  }, [dispatch]);
+  }, []);
   return (
     <div className="min-h-screen bg-indigo-50 px-6 py-10">
       {loading ? (
@@ -78,7 +79,7 @@ const BookMarks = () => {
                       {book.title}
                     </h2>
                     <p className="text-sm text-gray-600">
-                      {book.authors?.[0]?.name || "Unknown Author"}
+                      {book.author || "Unknown Author"}
                     </p>
                   </div>
                   <IconButton onClick={() => handleBookMark(book)}>

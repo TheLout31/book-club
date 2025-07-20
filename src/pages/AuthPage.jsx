@@ -1,5 +1,5 @@
 // src/pages/AuthPage.jsx
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
 import AuthForm from "../auth/AuthForm";
 import { useNavigate } from "react-router-dom";
 
@@ -19,13 +19,6 @@ const AuthPage = () => {
       {/* Left Side: Book Reference */}
       <div className="md:w-1/2 bg-gradient-to-tr from-white to-indigo-900 text-white flex flex-col justify-center items-center p-8">
         <h2 className="text-7xl font-bold mb-6">Welcome to BookVerse</h2>
-        {/* <p className="text-lg mb-4">“A reader lives a thousand lives before he dies.”</p>
-        <ul className="mt-6 space-y-2 text-sm text-gray-200">
-          <li>• The Alchemist - Paulo Coelho</li>
-          <li>• 1984 - George Orwell</li>
-          <li>• The Midnight Library - Matt Haig</li>
-          <li>• Atomic Habits - James Clear</li>
-        </ul> */}
       </div>
 
       {/* Right Side: Auth Form */}

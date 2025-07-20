@@ -5,6 +5,7 @@ import AuthPage from "./pages/AuthPage";
 import Navbar from "./components/Navbar";
 import Discussion from "./pages/Discussion";
 import BookMarks from "./pages/BookMarks";
+import SearchBooks from "./pages/SearchBooks";
 
 function App() {
   const location = useLocation();
@@ -16,7 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<AuthPage />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/discussions" element={<Discussion />} />
+        <Route path="/findbooks" element={<SearchBooks />} />
         <Route path="/bookmarks" element={<BookMarks />} />
       </Routes>
     </>

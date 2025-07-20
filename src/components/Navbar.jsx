@@ -49,9 +49,9 @@ const Navbar = () => {
             >
               Bookmarks
             </Link>
-            <button className="hover:bg-white hover:text-indigo-600 transition px-4 py-2 rounded-md font-semibold">
-              Suggestions
-            </button>
+            <Link to="/findbooks" className="hover:bg-white hover:text-indigo-600 transition px-4 py-2 rounded-md font-semibold">
+              Search
+            </Link>
             <Link
               to="/discussions"
               className="hover:bg-white hover:text-indigo-600 transition px-4 py-2 rounded-md font-semibold"
