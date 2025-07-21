@@ -1,47 +1,37 @@
-import React from "react";
-import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { clearAuth } from "../auth/services/authSlice";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../auth/services/authServices";
 
 const Navbar = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [menuOpen, setMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const toggleMenu = () => {
+    setMenuOpen((prev) => !prev);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const closeMenu = () => {
+    setMenuOpen(false);
   };
-
-  const options = ["Bookmarks", "Suggestion", "Discussions"];
-  const ITEM_HEIGHT = 48;
 
   const handleLogOut = () => {
     dispatch(logoutUser())
       .then(() => navigate("/"))
-      .catch((err) => setError(err.message));
+      .catch((err) => console.error(err.message));
   };
 
   return (
     <nav className="bg-indigo-700 text-white shadow-md">
-      <div className=" mx-auto lg:px-8">
+      <div className="mx-auto lg:px-8">
         <div className="flex justify-between items-center h-16 p-4">
           {/* Logo */}
-          <Link to="/home" className="flex-shrink-0 text-4xl font-extrabold ">
+          <Link to="/home" className="text-4xl font-extrabold">
             BookVerse
           </Link>
 
-          {/* Right Menu */}
+          {/* Desktop Menu */}
           <div className="hidden md:flex space-x-6">
             <Link
               to="/bookmarks"
@@ -49,7 +39,10 @@ const Navbar = () => {
             >
               Bookmarks
             </Link>
-            <Link to="/findbooks" className="hover:bg-white hover:text-indigo-600 transition px-4 py-2 rounded-md font-semibold">
+            <Link
+              to="/findbooks"
+              className="hover:bg-white hover:text-indigo-600 transition px-4 py-2 rounded-md font-semibold"
+            >
               Search
             </Link>
             <Link
@@ -60,46 +53,61 @@ const Navbar = () => {
             </Link>
             <button
               className="hover:bg-red-500 transition px-4 py-2 rounded-md font-semibold"
-              onClick={() => handleLogOut()}
+              onClick={handleLogOut}
             >
               Logout
             </button>
           </div>
 
-          <div className="md:hidden">
-            <IconButton
-              aria-controls={open ? "long-menu" : undefined}
-              aria-expanded={open ? "true" : undefined}
-              aria-haspopup="true"
-              onClick={handleClick}
+          {/* Custom Hamburger Button */}
+          <div className="md:hidden flex items-center">
+            <button
+              className="flex flex-col space-y-1.5 focus:outline-none"
+              onClick={toggleMenu}
+              aria-label="Menu"
             >
-              <MenuRoundedIcon style={{ color: "white" }} />
-            </IconButton>
-            <Menu
-              id="long-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              slotProps={{
-                paper: {
-                  style: {
-                    maxHeight: ITEM_HEIGHT * 4.5,
-                    width: "20ch",
-                  },
-                },
-                list: {
-                  "aria-labelledby": "long-button",
-                },
-              }}
-            >
-              {options.map((option) => (
-                <MenuItem key={option} onClick={handleClose}>
-                  {option}
-                </MenuItem>
-              ))}
-            </Menu>
+              <span className="w-6 h-0.5 bg-white rounded"></span>
+              <span className="w-6 h-0.5 bg-white rounded"></span>
+              <span className="w-6 h-0.5 bg-white rounded"></span>
+            </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <div className="md:hidden px-4 pb-4 space-y-2">
+            <Link
+              to="/bookmarks"
+              onClick={closeMenu}
+              className="block text-white hover:bg-white hover:text-indigo-600 transition px-4 py-2 rounded-md font-semibold"
+            >
+              Bookmarks
+            </Link>
+            <Link
+              to="/findbooks"
+              onClick={closeMenu}
+              className="block text-white hover:bg-white hover:text-indigo-600 transition px-4 py-2 rounded-md font-semibold"
+            >
+              Search
+            </Link>
+            <Link
+              to="/discussions"
+              onClick={closeMenu}
+              className="block text-white hover:bg-white hover:text-indigo-600 transition px-4 py-2 rounded-md font-semibold"
+            >
+              Discussions
+            </Link>
+            <button
+              onClick={() => {
+                closeMenu();
+                handleLogOut();
+              }}
+              className="block text-white hover:bg-red-500 transition px-4 py-2 rounded-md font-semibold w-full text-left"
+            >
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   );
