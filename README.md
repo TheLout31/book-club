@@ -7,9 +7,8 @@ Book Club is a full-featured web application for book lovers. Users can explore 
 Frontend | Backend 
 
 ## Deployed App
-Frontend: https://deployed-site.whatever
-Backend: https://deployed-site.whatever
-Database: https://deployed-site.whatever
+Netlify: (https://bookvr.netlify.app/)
+
 
 ## Directory Structure
 ```bash
