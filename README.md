@@ -1,12 +1,86 @@
-# React + Vite
+# Project Title
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction
+Book Club is a full-featured web application for book lovers. Users can explore books by category, author, or popularity, search for specific titles, bookmark their favorites, and participate in a community discussion section to share thoughts and reviews with others.
 
-Currently, two official plugins are available:
+## Project Type
+Frontend | Backend 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Deployed App
+Frontend: https://deployed-site.whatever
+Backend: https://deployed-site.whatever
+Database: https://deployed-site.whatever
 
-## Expanding the ESLint configuration
+## Directory Structure
+```bash
+book-club/
+├── firebase/           
+├── frontend/          
+│   ├── components/
+│   ├── pages/
+│   ├── redux/
+│   └── ...
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Video Walkthrough of the project
+Attach a very short video walk-through of all of the features [ 1 - 3 minutes ]
+
+## Video Walkthrough of the codebase
+Attach a very short video walkthough of codebase [ 1 - 5 minutes ]
+
+## Features
+Key features.
+
+- Catalogize books
+- BookMarks Books
+- Community Discussion
+- Search books
+
+## design decisions or assumptions
+List your design desissions & assumptions
+
+## Installation & Getting started
+Installation steps:
+```bash
+git clone https://github.com/your-username/book-club.git
+cd book-club
+npm install
+npm run dev
+```
+
+## Usage
+Provide instructions and examples on how to use your project.
+
+```bash
+1. Register or log in.
+2. Explore books by categories or use the search bar.
+3. Bookmark interesting titles.
+Join community discussions by posting.
+```
+
+Include screenshots as necessary.
+
+## Credentials
+You can register yourself and start using the app.
+
+## APIs Used
+The api used is provided by https://openlibrary.org/
+
+## API Endpoints
+```bash
+GET https://openlibrary.org/subjects/category - retrieve books according to category
+GET https://openlibrary.org/search.json?q=${query}) - search books accroding to the book title and authors
+```
+
+## Technology Stack
+List and provide a brief overview of the technologies used in the project.
+
+-⚛️ React.js – Frontend UI
+
+-🔥 Firebase – Auth, Realtime Database
+
+-⚙️ Redux Toolkit – State management
+
+-🎨 Material UI / Tailwind CSS – Styling (depending on your actual stack)
+
+-🌐 Open Library API – Book data
