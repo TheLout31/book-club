@@ -12,7 +12,7 @@ const Home = () => {
 
      
       {/* Book List */}
-      <BooksList category={category} />
+      <BooksList />
     </div>
   );
 };

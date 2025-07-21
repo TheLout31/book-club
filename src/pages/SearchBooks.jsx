@@ -26,17 +26,17 @@ const SearchBooks = () => {
   return (
     <div className="p-4">
       <div className="max-w-sm mx-auto mb-10">
-        <label
+        <h1
           htmlFor="search"
-          className="block text-indigo-500 font-semibold mb-2 text-lg"
+          className=" text-indigo-500 font-semibold mb-2 text-lg"
         >
           Search Books
-        </label>
+        </h1>
         <div className="flex gap-2">
           <input
             id="search"
             className="border p-2 flex-1 rounded-4xl border-indigo-300 focus:ring-2 focus:outline-none focus:ring-indigo-500 shadow-sm transition"
-            placeholder="Search for books..."
+            placeholder="Search for books or authors..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
