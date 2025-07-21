@@ -79,7 +79,7 @@ const BooksList = () => {
   }, []);
 
   return (
-    <div>
+    <div >
       <div className="max-w-sm mx-auto mb-10">
         <label
           htmlFor="category"
@@ -104,7 +104,7 @@ const BooksList = () => {
           <option value="horror">Horror</option>
         </select>
       </div>
-      <div className="min-h-screen bg-indigo-50 px-6 py-10">
+      <div className="px-6 py-10">
         {loading ? (
           <div className="flex align-middle justify-center h-7">
             <CircularProgress size="3rem" style={{ color: "#432DD7" }} />

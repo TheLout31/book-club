@@ -60,7 +60,7 @@ const Discussion = () => {
   };
 
   return (
-    <div className="min-h-screen bg-indigo-50 p-6">
+    <div className="min-h-screen bg-amber-50  p-6">
       <h1 className="text-4xl font-extrabold text-center text-indigo-700 mb-8">
         Community Discussions
       </h1>
